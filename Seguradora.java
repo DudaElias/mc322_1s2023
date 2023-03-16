@@ -4,6 +4,7 @@ public class Seguradora {
     private String email;
     private String endereco;
 
+    // Construtor que setta as propriedades do objeto usando os setters
     public Seguradora(String nome,
             String telefone,
             String email,
