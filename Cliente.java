@@ -5,6 +5,7 @@ public class Cliente {
     private int idade;
     private String endereco;
 
+    // Construtor que setta as propriedades da classe usando os setters
     public Cliente(String nome,
             String cpf,
             String dataNascimento,
@@ -57,6 +58,7 @@ public class Cliente {
         this.idade = idade;
     }
 
+    //Método toString que manda uma string formatada com as propriedades da classe
     public String toString() {
         return "Nome: " + this.nome
                 + "\nCPF: " + this.cpf
@@ -65,6 +67,9 @@ public class Cliente {
                 + "\nEndereco: " + this.endereco;
     }
 
+    /*
+        Método que verifica o cpf do cliente se baseando na quantidade de números e demais condições estipuladas para um cpf ser válido
+    */
     public boolean validarCpf(String cpf) {
         cpf = cpf.replaceAll("[^0-9]", "");
         if (cpf.length() != 11)
