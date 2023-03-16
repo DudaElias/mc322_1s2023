@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.UUID;
 
 public class Sinistro {
     private int id;
@@ -36,10 +37,10 @@ public class Sinistro {
         this.id = id;
     }
     
-    // Método que gera um id para o objeto
+    // Método que gera um id para o objeto usando o UUID hash code
     public int gerarId(){
-        Random random = new Random();
-        return random.nextInt(10000);
+        UUID uuid = UUID.randomUUID();
+        return uuid.hashCode();
     }
 
 }
