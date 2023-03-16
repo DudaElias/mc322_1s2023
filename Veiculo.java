@@ -3,6 +3,7 @@ public class Veiculo {
     private String marca;
     private String modelo;
 
+    // Construtor da classe que setta as propriedades do objeto através de setters
     public Veiculo(String placa, String marca, String modelo) {
         setMarca(marca);
         setModelo(modelo);
