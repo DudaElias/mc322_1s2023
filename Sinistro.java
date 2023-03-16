@@ -5,6 +5,7 @@ public class Sinistro {
     private String data;
     private String endereco;
 
+    // Construtor da classe que setta as propriedades data e endereço com setters e cria um novo id para o objeto
     public Sinistro(String data, String endereco){
         setData(data);
         setEndereco(endereco);
@@ -35,6 +36,7 @@ public class Sinistro {
         this.id = id;
     }
     
+    // Método que gera um id para o objeto
     public int gerarId(){
         Random random = new Random();
         return random.nextInt(10000);
