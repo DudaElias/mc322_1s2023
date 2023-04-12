@@ -62,12 +62,12 @@ public class Cliente {
     }
 
     //Método toString que manda uma string formatada com as propriedades da classe
-    // tem que ter toString pra lista de veiculos???
     @Override
     public String toString() {
         return "Nome: " + this.nome
                 + "\nData Licenca: " + this.dataLicenca.toString()
-                + "\nEndereco: " + this.endereco;
+                + "\nEndereco: " + this.endereco
+                + "\nVeiculos: " + (this.listaVeiculos != null ? this.listaVeiculos.toString() : "");
     }
 
 }

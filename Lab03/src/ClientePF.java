@@ -16,13 +16,13 @@ public class ClientePF extends Cliente{
     LocalDate licenca,
     String genero,
     String classeEconomica,
-    List<Veiculo> listaVeiculos) throws Error{
+    List<Veiculo> listaVeiculos) throws Exception{
         super(nome,
         endereco,
         licenca,
         listaVeiculos);
         if(!validarCpf(cpf)){
-            throw new Error("CPF invalido");
+            throw new Exception("CPF invalido");
         }
         this.cpf = cpf;
         setDataNascimento(dataNascimento);

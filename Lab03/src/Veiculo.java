@@ -50,7 +50,7 @@ public class Veiculo {
     @Override
     public String toString() {
         return "Placa: " + this.placa
-        + "\nMarce: " + this.marca
+        + "\nMarca: " + this.marca
         + "\nModelo: " + this.modelo
         + "\nAno de Fabricacao: " + this.anoFabricacao;
     }

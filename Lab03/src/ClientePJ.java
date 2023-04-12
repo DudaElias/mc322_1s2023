@@ -12,10 +12,10 @@ public class ClientePJ extends Cliente {
         String endereco,
         LocalDate licenca,
         List<Veiculo> lista
-    ) throws Error{
+    ) throws Exception{
         super(nome, endereco, licenca, lista);
         if(!validarCnpj(cnpj))
-            throw new Error("CNPJ invalido");
+            throw new Exception("CNPJ invalido");
         setDataFundacao(dataFundacao);
         this.cnpj = cnpj;
     }

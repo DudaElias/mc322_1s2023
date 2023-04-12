@@ -73,14 +73,9 @@ public class Seguradora {
     }
 
     public boolean cadastrarCliente(Cliente cliente) {
-        if(listaClientes == null)
-            listaClientes = new ArrayList<Cliente>();
-        return listaClientes.add(new Cliente(
-            cliente.getNome(),
-            cliente.getEndereco(),
-            cliente.getDataLicenca(),
-            cliente.getListaVeiculos()
-        ));
+        if(this.listaClientes == null)
+            this.listaClientes = new ArrayList<Cliente>();
+        return this.listaClientes.add(cliente);
     }
 
     public boolean removerCliente(String id) {
@@ -130,10 +125,35 @@ public class Seguradora {
     }
 
     public boolean visualizarSinistro(String idCliente) {
+        for (Sinistro sinistro : this.listaSinistros) {
+             String idElemento = "";
+            Cliente cliente = sinistro.getCliente();
+            if(cliente instanceof ClientePF)
+                idElemento = ((ClientePF)cliente).getCpf();
+            else if(cliente instanceof ClientePJ)
+                idElemento = ((ClientePJ)cliente).getCnpj();
+            if(idElemento.equals(idCliente)){
+                System.out.println(sinistro.toString());
+            }
+        }
         return true;
     }
 
     public List<Sinistro> listarSinistros(){
         return listaSinistros;
+    }
+
+    public String toString(){
+        String clientesString = "";
+        int i = 1;
+        for (Cliente cliente : listaClientes) {
+            clientesString = clientesString.concat("\tCliente "+ i + ": \n" + cliente.toString() + "\n");
+        }
+        return "Nome: " + this.nome
+             + "\nEmail: " + this.email
+             + "\nEndereco: " + this.endereco
+             + "\nTelefone: " + this.telefone
+             + "\nClientes: \n" + clientesString;
+           // + "\nSinistros: " + (this.listaSinistros != null ? this.listaSinistros.toString() : "");
     }
 }

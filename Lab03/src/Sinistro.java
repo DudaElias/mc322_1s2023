@@ -76,8 +76,8 @@ public class Sinistro {
         return "Id: " + this.id
         + "\nData: " + this.data
         + "\nEndereco: " + this.endereco
-        + "\nSeguradora: " + this.seguradora.getNome()
-        + "\nVeiculo: " + this.veiculo.getPlaca()
-        + "\nCliente: " + this.cliente.getNome();
+        + "\nSeguradora: " + this.seguradora.toString()
+        + "\nVeiculo: " + this.veiculo.toString()
+        + "\nCliente: " + this.cliente.toString();
     }
 }
