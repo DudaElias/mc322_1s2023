@@ -5,17 +5,14 @@ import java.util.List;
 public class Cliente {
     protected String nome;
     protected String endereco;
-    protected LocalDate dataLicenca;
     protected List<Veiculo> listaVeiculos;
 
     // Construtor que setta as propriedades da classe usando os setters
     public Cliente(String nome,
             String endereco,
-            LocalDate licenca,
             List<Veiculo> listaVeiculos) {
         setNome(nome);
         setEndereco(endereco);
-        setDataLicenca(licenca);
         setListaVeiculos(listaVeiculos);
     }
 
@@ -35,14 +32,6 @@ public class Cliente {
         this.endereco = endereco;
     }
 
-    public LocalDate getDataLicenca() {
-        return dataLicenca;
-    }
-
-    public void setDataLicenca(LocalDate dataLicenca) {
-        this.dataLicenca = dataLicenca;
-    }
-
     public List<Veiculo> getListaVeiculos() {
         return listaVeiculos;
     }
@@ -51,19 +40,10 @@ public class Cliente {
         this.listaVeiculos = listaVeiculos;
     }
 
-    public boolean adicionarVeiculo(Veiculo veiculo) {
-        if(this.listaVeiculos == null)
-            this.listaVeiculos = new ArrayList<Veiculo>();
-        return this.listaVeiculos.add(veiculo);
-    }
-
-    public boolean removerVeiculo(String placa) {
-        return this.listaVeiculos.removeIf((veiculo) -> (veiculo.getPlaca().equals(placa)));
-    }
-
     //Método toString que manda uma string formatada com as propriedades da classe
     @Override
     public String toString() {
+        //Formatar o array de veiculos para ficar melhor no console
         String veiculosString = "";
         int i = 1;
         for (Veiculo veiculo : listaVeiculos) {
@@ -72,7 +52,6 @@ public class Cliente {
         }
 
         return "Nome: " + this.nome
-                + "\nData Licenca: " + this.dataLicenca.toString()
                 + "\nEndereco: " + this.endereco
                 + "\nVeiculos: \n" + veiculosString;
     }

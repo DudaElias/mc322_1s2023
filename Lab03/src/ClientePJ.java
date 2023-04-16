@@ -5,15 +5,15 @@ public class ClientePJ extends Cliente {
     private final String cnpj;
     private LocalDate dataFundacao;
 
+    //Construtor padrão do ClientePJ, verifica se o cnpj eh valido e joga excessao caso seja invalido
     public ClientePJ(
         String cnpj,
         LocalDate dataFundacao,
         String nome,
         String endereco,
-        LocalDate licenca,
         List<Veiculo> lista
     ) throws Exception{
-        super(nome, endereco, licenca, lista);
+        super(nome, endereco, lista);
         if(!validarCnpj(cnpj))
             throw new Exception("CNPJ invalido");
         setDataFundacao(dataFundacao);
@@ -32,6 +32,7 @@ public class ClientePJ extends Cliente {
         this.dataFundacao = dataFundacao;
     }
 
+    //Método toString para mostrar os atributos da classe e da classe mãe
     @Override
     public String toString() {
         return  "CNPJ: " + this.cnpj
@@ -39,6 +40,7 @@ public class ClientePJ extends Cliente {
         + "\n" + super.toString();
     }
 
+    //Método que valida o CNPJ fazendo as validaçoes padrão
     public static boolean validarCnpj(String cnpj){
         cnpj = cnpj.replaceAll("[^0-9]", "");
         if (cnpj.length() != 14)
@@ -59,9 +61,6 @@ public class ClientePJ extends Cliente {
         sm = 0;
         peso = 2;
         for (i=11; i>=0; i--) {
-  // converte o i-ésimo caractere do CNPJ em um número:
-  // por exemplo, transforma o caractere '0' no inteiro 0
-  // (48 eh a posição de '0' na tabela ASCII)
           num = (int)(cnpj.charAt(i) - 48);
           sm = sm + (num * peso);
           peso = peso + 1;
@@ -74,7 +73,6 @@ public class ClientePJ extends Cliente {
            dig13 = '0';
         else dig13 = (char)((11-r) + 48);
   
-  // Calculo do 2o. Digito Verificador
         sm = 0;
         peso = 2;
         for (i=12; i>=0; i--) {
@@ -90,7 +88,6 @@ public class ClientePJ extends Cliente {
            dig14 = '0';
         else dig14 = (char)((11-r) + 48);
   
-        // Verifica se os dígitos calculados conferem com os dígitos informados.
         if ((dig13 == cnpj.charAt(12)) && (dig14 == cnpj.charAt(13)))
            return(true);
         else return(false);

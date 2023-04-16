@@ -46,7 +46,8 @@ public class Veiculo {
     public void setAnoFabricacao(int anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
     }
-
+    
+    //Método toString para formatar os atributos da classe em formato de texto
     @Override
     public String toString() {
         return "Placa: " + this.placa

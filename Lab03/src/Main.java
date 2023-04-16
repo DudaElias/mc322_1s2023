@@ -15,8 +15,8 @@ public class Main {
             Veiculo veiculo = new Veiculo("abc1234", "Honda", "FIT", 2015); 
             
             ClientePF pf = new ClientePF("465.744.250-34", LocalDate.of(2003, 8, 29), "Teste", "Rua de Teste", "Teste Educacao", LocalDate.of(2013, 07, 20), "Teste Genero", "Teste Classe", Arrays.asList(veiculo, veiculo));
-            ClientePJ pj = new ClientePJ("47.771.224/0001-60", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", LocalDate.of(2013, 07, 20), Arrays.asList(veiculo, veiculo));
-            ClientePJ pj2 = new ClientePJ("83.160.132/0001-08", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", LocalDate.of(2013, 07, 20), Arrays.asList(veiculo, veiculo));
+            ClientePJ pj = new ClientePJ("47.771.224/0001-60", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", Arrays.asList(veiculo, veiculo));
+            ClientePJ pj2 = new ClientePJ("83.160.132/0001-08", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", Arrays.asList(veiculo, veiculo));
             
             Sinistro sinistro = new Sinistro("14-03-2023", "Rua de Teste", seguradora, pj, veiculo);
 
@@ -55,11 +55,12 @@ public class Main {
             System.out.println("Seguradora:\n" + seguradora.toString());
 
         } catch(Exception err) {
-            System.out.println("ERROR");
+            System.out.println("Erro de validação");
         }
     }
 
     private static void menu() {
+        //Menu simples usando System.in para validacao do CPF ou CNPJ
         Scanner scan = new Scanner(System.in);  
         System.out.println("=============== Menu ===============");
         System.out.println("0 - Validar CPF");
@@ -70,16 +71,17 @@ public class Main {
             case "0":
                 System.out.print("Digite o CPF: ");
                 String cpf = scan.nextLine();
-                System.out.println(ClientePF.validarCpf(cpf));
+                System.out.println(ClientePF.validarCpf(cpf) ? "CPF eh valido" : "CPF eh invalido");
                 break;
             case "1":
                 System.out.print("Digite o CNPJ: ");
                 String cnpj = scan.nextLine();
-                System.out.println(ClientePJ.validarCnpj(cnpj));
+                System.out.println(ClientePJ.validarCnpj(cnpj) ? "CNPJ eh valido" : "CNPJ eh invalido");
                 break;
             default:
                 break;
         }
-        System.out.println("\n");
+        System.out.println("Aperte [ENTER] para continuar!");
+        scan.nextLine();
     }
 }

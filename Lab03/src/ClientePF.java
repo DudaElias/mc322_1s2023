@@ -4,10 +4,12 @@ import java.util.List;
 public class ClientePF extends Cliente{
     private final String cpf;
     private LocalDate dataNascimento;
+    protected LocalDate dataLicenca;
     protected String educacao;
     protected String genero;
     protected String classeEconomica;
 
+    //Construtor padrão do ClientePF, verifica se o cpf eh valido e joga excessao caso seja invalido
     public ClientePF(String cpf,
     LocalDate dataNascimento,
     String nome,
@@ -19,7 +21,6 @@ public class ClientePF extends Cliente{
     List<Veiculo> listaVeiculos) throws Exception{
         super(nome,
         endereco,
-        licenca,
         listaVeiculos);
         if(!validarCpf(cpf)){
             throw new Exception("CPF invalido");
@@ -29,6 +30,7 @@ public class ClientePF extends Cliente{
         setClasseEconomica(classeEconomica);
         setEducacao(educacao);
         setGenero(genero);
+        setDataLicenca(licenca);
     }
 
     public String getCpf() {
@@ -41,6 +43,14 @@ public class ClientePF extends Cliente{
 
     public void setClasseEconomica(String classeEconomica) {
         this.classeEconomica = classeEconomica;
+    }
+
+    public LocalDate getDataLicenca() {
+        return dataLicenca;
+    }
+
+    public void setDataLicenca(LocalDate dataLicenca) {
+        this.dataLicenca = dataLicenca;
     }
 
     public String getEducacao() {
@@ -68,9 +78,7 @@ public class ClientePF extends Cliente{
     }
 
 
-    /*
-        Método que verifica o cpf do cliente se baseando na quantidade de números e demais condições estipuladas para um cpf ser válido
-    */
+    // Verifica o cpf do cliente se baseando na quantidade de números e demais condições estipuladas para um cpf ser válido
     public static boolean validarCpf(String cpf) {
         cpf = cpf.replaceAll("[^0-9]", "");
         if (cpf.length() != 11)
@@ -121,6 +129,7 @@ public class ClientePF extends Cliente{
             return false;
     }
 
+    //Método toString para mostrar os atributos da classe, da classe mãe tambem
     @Override
     public String toString() {
         return "CPF: " + this.cpf
@@ -128,6 +137,7 @@ public class ClientePF extends Cliente{
         + "\nClasse Economica: " + this.classeEconomica
         + "\nGenero: " + this.genero     
         + "\nData de Nascimento: " + this.dataNascimento.toString()
+        + "\nData Licenca: " + this.dataLicenca.toString()
         + "\n" + super.toString();
     }
 

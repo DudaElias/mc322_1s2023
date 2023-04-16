@@ -73,12 +73,14 @@ public class Seguradora {
     }
 
     public boolean cadastrarCliente(Cliente cliente) {
-        if(this.listaClientes == null)
+        if(this.listaClientes == null) // verifica se ainda não existe uma lista instanciada
             this.listaClientes = new ArrayList<Cliente>();
         return this.listaClientes.add(cliente);
     }
 
     public boolean removerCliente(String id) {
+
+        //Determina qual o tipo de cada cliente dentro da lista se baseando na instancia
 
         boolean removeu = listaClientes.removeIf(elemento -> {
             String idElemento = "";
@@ -118,8 +120,9 @@ public class Seguradora {
     }
 
     public boolean gerarSinistro() {
+        //Cria um veiculo default e gera um sinistro com o primeiro cliente da lista e esse veiculo
         Veiculo veiculo = new Veiculo("abc1234", "Honda", "FIT", 2015); 
-        if(listaSinistros == null)
+        if(listaSinistros == null) //Verifica se já existe a lista de sinistros
             listaSinistros = new ArrayList<Sinistro>();
         return listaSinistros.add(new Sinistro(email, endereco, this, listaClientes.get(0),veiculo));
     }
@@ -128,11 +131,13 @@ public class Seguradora {
         for (Sinistro sinistro : this.listaSinistros) {
              String idElemento = "";
             Cliente cliente = sinistro.getCliente();
+            //Define se é cpf ou cnpj baseado na instancia de cada cliente dentro da lista de clientes do sinistro
             if(cliente instanceof ClientePF)
                 idElemento = ((ClientePF)cliente).getCpf();
             else if(cliente instanceof ClientePJ)
                 idElemento = ((ClientePJ)cliente).getCnpj();
             if(idElemento.equals(idCliente)){
+                //Quando achar o cliente dentro da lista de sinistros ele mostra o sinistro atual
                 System.out.println(sinistro.toString());
             }
         }
@@ -143,6 +148,7 @@ public class Seguradora {
         return listaSinistros;
     }
 
+    //Método toString que formata a lista de clientes e de sinistros para deixar a leitura no console mais simples
     public String toString(){
         String clientesString = "";
         int i = 1;

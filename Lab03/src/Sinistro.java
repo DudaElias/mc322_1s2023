@@ -71,6 +71,7 @@ public class Sinistro {
         this.veiculo = veiculo;
     }
 
+    //Método toString para formatar os atributos da classe em formato de texto
     @Override
     public String toString(){
         return "Id: " + this.id
