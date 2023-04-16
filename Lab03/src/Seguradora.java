@@ -148,12 +148,25 @@ public class Seguradora {
         int i = 1;
         for (Cliente cliente : listaClientes) {
             clientesString = clientesString.concat("\tCliente "+ i + ": \n" + cliente.toString() + "\n");
+            i++;
+        }
+
+        String sinistrosString = "";
+        i = 1;
+        for (Sinistro sinistro : listaSinistros) {
+            sinistrosString = sinistrosString.concat("\n\tSinistro "+ i + ": \n" 
+            + "Id: " + sinistro.getId()
+            + "\nData: " + sinistro.getData()
+            + "\nEndereco: " + sinistro.getEndereco()
+            + "\nVeiculo: " + sinistro.getVeiculo().toString()
+            + "\nCliente: " + sinistro.getCliente().toString() + "\n");
+            i++;
         }
         return "Nome: " + this.nome
              + "\nEmail: " + this.email
              + "\nEndereco: " + this.endereco
              + "\nTelefone: " + this.telefone
-             + "\nClientes: \n" + clientesString;
-           // + "\nSinistros: " + (this.listaSinistros != null ? this.listaSinistros.toString() : "");
+             + "\nClientes: \n" + clientesString
+             + "\nSinistros: " + sinistrosString;
     }
 }

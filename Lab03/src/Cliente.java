@@ -64,10 +64,17 @@ public class Cliente {
     //Método toString que manda uma string formatada com as propriedades da classe
     @Override
     public String toString() {
+        String veiculosString = "";
+        int i = 1;
+        for (Veiculo veiculo : listaVeiculos) {
+            veiculosString = veiculosString.concat("\tVeiculo "+ i + ": \n" + veiculo.toString() + "\n");
+            i++;
+        }
+
         return "Nome: " + this.nome
                 + "\nData Licenca: " + this.dataLicenca.toString()
                 + "\nEndereco: " + this.endereco
-                + "\nVeiculos: " + (this.listaVeiculos != null ? this.listaVeiculos.toString() : "");
+                + "\nVeiculos: \n" + veiculosString;
     }
 
 }

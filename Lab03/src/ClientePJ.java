@@ -34,9 +34,9 @@ public class ClientePJ extends Cliente {
 
     @Override
     public String toString() {
-        return super.toString()
-        + "\nCNPJ: " + this.cnpj
-        + "\nData Fundacao: " + this.dataFundacao.toString();
+        return  "CNPJ: " + this.cnpj
+        + "\nData Fundacao: " + this.dataFundacao.toString()
+        + "\n" + super.toString();
     }
 
     public static boolean validarCnpj(String cnpj){

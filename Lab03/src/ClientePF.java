@@ -123,12 +123,12 @@ public class ClientePF extends Cliente{
 
     @Override
     public String toString() {
-        return super.toString()
-        + "\nCPF: " + this.cpf
+        return "CPF: " + this.cpf
         + "\nEducacao: " + this.educacao
         + "\nClasse Economica: " + this.classeEconomica
         + "\nGenero: " + this.genero     
-        + "\nData de Nascimento: " + this.dataNascimento.toString();
+        + "\nData de Nascimento: " + this.dataNascimento.toString()
+        + "\n" + super.toString();
     }
 
 }
