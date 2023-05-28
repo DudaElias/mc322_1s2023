@@ -13,6 +13,8 @@ public abstract class Cliente {
             String email) {
         setNome(nome);
         setEndereco(endereco);
+        setEmail(email);
+        setTelefone(telefone);
     }
 
     

@@ -88,8 +88,8 @@ public abstract class Seguro {
     public boolean gerarSinistro(String email, String endereco, String cpf) {
         Condutor condutor = listaCondutores.stream().filter(c -> c.getCpf().equals(cpf)).findFirst().orElse(null);
         if(condutor != null)
-            condutor.listaSinistros.add(new Sinistro(email, endereco));
-        return listaSinistros.add(new Sinistro(email, endereco));
+            condutor.listaSinistros.add(new Sinistro(email, endereco, condutor, this));
+        return listaSinistros.add(new Sinistro(email, endereco, condutor, this));
     }
 
     /** 

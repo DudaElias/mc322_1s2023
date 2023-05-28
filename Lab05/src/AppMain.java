@@ -26,36 +26,48 @@ public class AppMain {
             ClientePJ pj = new ClientePJ("83.160.132/0001-08", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", "123456", "teste@gmail.com", 100);
 
             Condutor condutor = new Condutor("368.355.130-55", "Jose", "123456", "Rua de Teste", "teste@gmail.com", LocalDate.of(1975, 07, 20));
-            
-            Frota frota = new Frota("123");
-            frota.addVeiculo(veiculo2);
+            Condutor condutor2 = new Condutor("062.377.060-11", "Maria", "123456", "Rua de Teste", "teste@gmail.com", LocalDate.of(1975, 07, 20));
 
+            Frota frota = new Frota("123");
+            
+            frota.addVeiculo(veiculo2);
+            
+            
             //Cadastrar veiculos nos clientes
             pf.listaVeiculos.add(veiculo);
-
+            
             // Cadastrar clientes na seguradora
             seguradora.cadastrarCliente(pf);
             seguradora.cadastrarCliente(pj);
+            
+            
+            SeguroPF seguroPF = new SeguroPF(0, LocalDate.of(2013, 07, 20), LocalDate.of(2020, 07, 20), seguradora, veiculo, pf);
+            SeguroPJ seguroPJ = new SeguroPJ(1, LocalDate.of(2013, 07, 20), LocalDate.of(2023, 07, 20), seguradora, frota, pj);
+            
+            // Autorizar condutor
+            seguroPF.autorizarCondutor(condutor);
+            seguroPJ.autorizarCondutor(condutor2);
 
             // Gera um seguro dentro da seguradora
-            seguradora.gerarSeguro(new SeguroPF(0, LocalDate.of(2013, 07, 20), LocalDate.of(2020, 07, 20), seguradora, veiculo, pf));
-            seguradora.gerarSeguro(new SeguroPJ(1, LocalDate.of(2013, 07, 20), LocalDate.of(2023, 07, 20), seguradora, frota, pj));
+            seguradora.gerarSeguro(seguroPF);
+            seguradora.gerarSeguro(seguroPJ);
 
 
             // Gera um sinistro dentro da seguradora
             seguradora.getListaSeguros().get(0).gerarSinistro("teste@gmail.com", "Rua de Teste", "368.355.130-55");
+            seguradora.getListaSeguros().get(1).gerarSinistro("teste@gmail.com", "Rua de Teste", "062.377.060-11");
 
             // Lista clientes do tipo PJ
             List<Cliente> clientes = seguradora.listarClientes("pj");
             System.out.println("Clientes da Seguradora: \n" + clientes.toString() + "\n");
 
             // Lista todos os sinistros cadastrados num determinado cliente
-            List<Sinistro> sinistros = seguradora.getSinistrosPorCliente("");
-            System.out.println("Sinistros da Seguradora: \n" + sinistros.toString() + "\n");
+            List<Sinistro> sinistros = seguradora.getSinistrosPorCliente("368.355.130-55", "pf");
+            System.out.println("Sinistros do cliente: \n" + sinistros.toString() + "\n");
 
-            // Mostra o sinistro de determinado cliente dentro da seguradora
-            System.out.println("Sinistro especifico: \n");
-            seguradora.visualizarSinistro("465.744.250-34");
+            // Lista todos os seguros cadastrados num determinado cliente
+            List<Seguro> seguros = seguradora.getSegurosPorCliente("368.355.130-55", "pf");
+            System.out.println("Seguros do cliente: \n" + seguros.toString() + "\n");
 
             // CALCULAR RECEITA
             System.out.printf("Receita da seguradora: %f\n", seguradora.calcularReceita());
@@ -70,6 +82,13 @@ public class AppMain {
             System.out.println("Seguro PJ:\n" + seguradora.getListaSeguros().get(1).toString() + "\n");
             System.out.println("Sinistro:\n" + seguradora.getListaSeguros().get(0).listaSinistros.get(0).toString() + "\n");
             System.out.println("Seguradora:\n" + seguradora.toString());
+
+
+            //Outros métodos da seguradora
+            System.out.println("Listar Cliente: \n" + seguradora.listarClientes("pf").toString());
+            System.out.println("Buscar Cliente:\n" + seguradora.buscarCliente("465.744.250-34"));
+            System.out.println("Cancelar Seguro: \n" + (seguradora.cancelarSeguro(0) ? "Seguro cancelado" : "Erro ao cancelar seguro"));
+            System.out.println("Remover Cliente: \n"+ (seguradora.removerCliente("465.744.250-34") ? "Cliente removido" : "Erro ao remover o cliente"));
 
             AppMain menus = new AppMain();
             menus.menuPrincipal();
@@ -90,8 +109,8 @@ public class AppMain {
             System.out.println("2 - Listar");
             System.out.println("3 - Excluir");
             System.out.println("4 - Gerar Sinistro");
-            System.out.println("5 - Transferir Seguro");
-            System.out.println("6 - Calcular Receita Seguradora");
+            System.out.println("5 - Calcular Receita Seguradora");
+            System.out.println("6 - Gerar Seguro");
             System.out.println("0 - Sair");
             System.out.println("Digite o número correspondente a operacao que deseja realizar:");
 
@@ -110,11 +129,11 @@ public class AppMain {
                 case GERAR_SINISTRO:
                     gerarSinistroDados();
                     break;
-                case TRANSFERIR_SEGURO:
-                    transferirSeguro();
-                    break;
                 case CALCULAR_RECEITA_SEGURO:
                     calcularReceita();
+                    break;
+                case GERAR_SEGURO:
+                    gerarSeguroDados();
                     break;
                 case SAIR:
                     return;
@@ -132,6 +151,7 @@ public class AppMain {
         System.out.println("1.1 - Cadastrar Cliente PF/PJ");
         System.out.println("1.2 - Cadastrar Veiculo");
         System.out.println("1.3 - Cadastrar Seguradora");
+        System.out.println("1.4 - Cadastrar Frota");
         System.out.println("7 - Voltar");
     }
 
@@ -143,6 +163,8 @@ public class AppMain {
         System.out.println("3.1 - Excluir Cliente");
         System.out.println("3.2 - Excluir Veiculo");
         System.out.println("3.3 - Excluir Sinistro");
+        System.out.println("3.4 - Excluir Seguro");
+        System.out.println("3.5 - Excluir Frota");
         System.out.println("7 - Voltar");
     }
 
@@ -156,6 +178,8 @@ public class AppMain {
         System.out.println("2.3 - Listar Sinistro por Cliente");
         System.out.println("2.4 - Listar Veiculo por Cliente");
         System.out.println("2.5 - Listar Veiculo por Seguradora");
+        System.out.println("2.6 - Listar Seguro por Cliente");
+        System.out.println("2.7 - Listar Veiculo por Frota");
         System.out.println("7 - Voltar");
     }
 
@@ -179,6 +203,9 @@ public class AppMain {
                     break;
                 case CADASTRAR_VEICULO:
                     cadastrarVeiculo();
+                    break;
+                case CADASTRAR_FROTA:
+                    cadastrarFrota();
                     break;
                 case VOLTAR:
                     menuPrincipal();
@@ -216,6 +243,12 @@ public class AppMain {
                 case LISTAR_VEICULO_SEGURADORA:
                     listarVeiculoSeguradora();
                     break;
+                case LISTAR_SEGURO_CLIENTE:
+                    listarSeguroCliente();
+                    break;
+                case LISTAR_VEICULO_FROTA:
+                    listarVeiculoFrota();
+                    break;
                 case VOLTAR:
                     break;
                 default:
@@ -245,6 +278,12 @@ public class AppMain {
                 case EXCLUIR_VEICULO:
                     excluirVeiculo();
                     break;
+                case EXCLUIR_SEGURO:
+                    excluirSeguro();
+                    break;
+                case EXCLUIR_FROTA:
+                    excluirFrota();
+                    break;
                 case VOLTAR:
                     break;
                 default:
@@ -270,6 +309,23 @@ public class AppMain {
     }
 
     /** 
+     * Método que pede e retorna a seguradora que o user escolheu
+     * @author Maria Eduarda Rocha
+     * @return Seguradora - seguradora escolhida pelo user*/
+    public Seguro selecionarSeguro() {
+        Seguradora seguradora = selecionarSeguradora();
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Qual seguro (id)? ");
+        int id = scan.nextInt();
+        Seguro selecionada = null;
+        for (Seguro s : seguradora.getListaSeguros()) {
+            if (s.getId() == id)
+                selecionada = s;
+        }
+        return selecionada;
+    }
+
+    /** 
      * Método que seleciona o cliente baseado no seu documento digitado pelo user
      * @author Maria Eduarda Rocha
      * @param seguradora Seguradora - seguradora no qual o cliente foi adicionado
@@ -279,6 +335,28 @@ public class AppMain {
         System.out.println("Qual o CPF/CNPJ do cliente?");
         String doc = scan.nextLine();
         return seguradora.buscarCliente(doc);
+    }
+
+    public Frota selecionarFrota(ClientePJ c){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Qual o code da frota?");
+        String doc = scan.nextLine();
+        for (Frota f : c.listaFrota) {
+            if(f.getCode().equals(doc))
+                return f;
+        }
+        return null;
+    }
+
+    public Veiculo selecionarVeiculo(ClientePF c){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Qual a placa do veiculo?");
+        String doc = scan.nextLine();
+        for (Veiculo v : c.listaVeiculos) {
+            if(v.getPlaca().equals(doc))
+                return v;
+        }
+        return null;
     }
 
     /** 
@@ -298,9 +376,14 @@ public class AppMain {
             System.out.print("Qual o email da seguradora?");
             email = scan.nextLine();
         } while (!Validacao.validaEmail(email));
+        String cnpj = "";
+        do {
+            System.out.print("Digite o CNPJ da seguradora (XX.XXX.XXX/XXXX-XX): ");
+            cnpj = scan.nextLine();
+        } while (!Validacao.validarCnpj(cnpj));
         System.out.println("Qual o endereco da seguradora?");
         String endereco = scan.nextLine();
-        if (seguradoras.add(new Seguradora(nome, telefone, email, endereco)))
+        if (seguradoras.add(new Seguradora(nome, telefone, email, endereco, cnpj)))
             System.out.println("Seguradora adicionada com sucesso!");
         else
             System.out.println("Erro ao cadastrar a seguradora!");
@@ -310,9 +393,9 @@ public class AppMain {
      * Método que adiciona um novo veiculo em um cliente dentro de uma seguradora
      * @author Maria Eduarda Rocha*/
     public void cadastrarVeiculo() {
+        Scanner scan = new Scanner(System.in);
         Seguradora seguradora = selecionarSeguradora();
         Cliente cliente = selecionarCliente(seguradora);
-        Scanner scan = new Scanner(System.in);
         System.out.println("Qual a placa do veiculo?");
         String placa = scan.nextLine();
         System.out.println("Qual a marca do veiculo?");
@@ -321,10 +404,43 @@ public class AppMain {
         String modelo = scan.nextLine();
         System.out.println("Qual o ano e fabricação do veiculo?");
         int ano = scan.nextInt();
-        if (cliente.listaVeiculos.add(new Veiculo(placa, marca, modelo, ano)))
-            System.out.println("Veiculo adicionado com sucesso!");
-        else
-            System.out.println("Erro ao cadastrar o veiculo!");
+        if(cliente instanceof ClientePJ){
+            System.out.println("Qual o code da frota?");
+            String code = scan.nextLine();
+            List<Frota> frotas = ((ClientePJ)cliente).getListaFrota();
+            for (Frota f : frotas) {
+                if(f.getCode().equals(code)){
+                    if (f.listaVeiculos.add(new Veiculo(placa, marca, modelo, ano)))
+                        System.out.println("Veiculo adicionado com sucesso!");
+                    else
+                        System.out.println("Erro ao cadastrar o veiculo!");
+                }
+            }
+            
+        }
+        else{
+            if (((ClientePF)cliente).listaVeiculos.add(new Veiculo(placa, marca, modelo, ano)))
+                System.out.println("Veiculo adicionado com sucesso!");
+            else
+                System.out.println("Erro ao cadastrar o veiculo!");
+        }
+    }
+
+
+    public void cadastrarFrota() {
+        Scanner scan = new Scanner(System.in);
+        Seguradora seguradora = selecionarSeguradora();
+        Cliente cliente = selecionarCliente(seguradora);
+        if(cliente instanceof ClientePJ){
+            System.out.println("Qual o code da frota?");
+            String code = scan.nextLine();
+            if (((ClientePJ)cliente).cadastrarFrota(new Frota(code)))
+                System.out.println("Frota adicionada com sucesso!");
+            else
+                System.out.println("Erro ao cadastrar a frota!");
+            
+        }
+
     }
 
     /** 
@@ -347,7 +463,10 @@ public class AppMain {
      * @author Maria Eduarda Rocha*/
     public void listarSinistrosPorSeguradora(){
         Seguradora seguradora = selecionarSeguradora();
-        List<Sinistro> sinistros = seguradora.listarSinistros();
+        List<Sinistro> sinistros = new ArrayList<Sinistro>();
+        for(Seguro seguro : seguradora.getListaSeguros()){
+            sinistros.addAll(seguro.listaSinistros);
+        }
         for(Sinistro sinistro : sinistros){
             System.out.println("\t\tSinistro:");
             System.out.println(sinistro.toString());
@@ -362,7 +481,13 @@ public class AppMain {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digitar documento do cliente: ");
         String doc = scan.nextLine();
-        seguradora.visualizarSinistro(doc);
+        System.out.println("Pessoa Física ou Jurídica? (PF/PJ)");
+        String tipo = scan.nextLine();
+        List<Sinistro> sinistros = seguradora.getSinistrosPorCliente(doc, tipo);
+        for (Sinistro sinistro : sinistros) {
+            System.out.println("\nSinistro\n");
+            System.out.println(sinistro.toString());
+        }
     }
 
     /** 
@@ -374,9 +499,23 @@ public class AppMain {
         System.out.println("Digite o documento do cliente: ");
         String doc = scan.nextLine();
         Cliente cliente = seguradora.buscarCliente(doc);
-        for(Veiculo veiculo: cliente.getListaVeiculos()){
-            System.out.println("\t\tVeiculo:");
-            System.out.println(veiculo.toString());
+        listarVeiculos(cliente);
+    }
+
+    public void listarVeiculos(Cliente cliente){
+        if(cliente instanceof ClientePF){
+            for(Veiculo veiculo: ((ClientePF)cliente).listaVeiculos){
+                System.out.println("\t\tVeiculo:");
+                System.out.println(veiculo.toString());
+            }
+        }
+        else{
+            for(Frota frota : ((ClientePJ)cliente).listaFrota){
+                for(Veiculo veiculo: frota.listaVeiculos){
+                    System.out.println("\t\tVeiculo:");
+                    System.out.println(veiculo.toString());
+               }
+            }
         }
     }
 
@@ -387,9 +526,39 @@ public class AppMain {
         Seguradora seguradora = selecionarSeguradora();
         List<Cliente> clientes = seguradora.getListaClientes();
         for(Cliente cliente: clientes){
-            for(Veiculo veiculo: cliente.getListaVeiculos()){
-                System.out.println("\t\tVeiculo:");
-                System.out.println(veiculo.toString());
+            listarVeiculos(cliente);
+        }
+    }
+
+
+    public void listarSeguroCliente(){
+        Scanner scan = new Scanner(System.in);
+        Seguradora seguradora = selecionarSeguradora();
+        System.out.println("Qual o CPF/CNPJ do cliente?");
+        String doc = scan.nextLine();        
+        System.out.println("Pessoa Física ou Juridica? (PF/PJ)");
+        String tipo = scan.nextLine();
+        List<Seguro> seguros = seguradora.getSegurosPorCliente(doc, tipo);
+        for(Seguro seguro: seguros){
+            System.out.println("\t\tSeguro:");
+            System.out.println(seguro.toString());
+        }
+    }
+
+    public void listarVeiculoFrota(){
+        Scanner scan = new Scanner(System.in);
+        Seguradora seguradora = selecionarSeguradora();
+        Cliente cliente = selecionarCliente(seguradora);
+        if(cliente instanceof ClientePJ){
+            System.out.println("Qual o code da frota?");
+            String code = scan.nextLine();
+            for (Frota f : ((ClientePJ)cliente).listaFrota) {
+                if(f.getCode().equals(code)){
+                    for(Veiculo v: f.listaVeiculos){
+                        System.out.println("\t\tVeiculo:");
+                        System.out.println(v.toString());
+                    }
+                }
             }
         }
     }
@@ -416,21 +585,53 @@ public class AppMain {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digite o documento do cliente que deseja excluir o sinistro: ");
         String doc = scan.nextLine();
-        boolean removeu = seguradora.getListaSinistros().removeIf(sinistro -> {
-            String idElemento = "";
+        List<Sinistro> sinistros = new ArrayList<Sinistro>();
+        for(Seguro seguro : seguradora.getListaSeguros()){
+            sinistros.addAll(seguro.listaSinistros);
+        }
 
-            Cliente cliente = sinistro.getCliente();
-            if(cliente instanceof ClientePF)
-                idElemento = ((ClientePF)cliente).getCpf();
-            else if(cliente instanceof ClientePJ)
-                idElemento = ((ClientePJ)cliente).getCnpj();
-            return idElemento.equals(doc); 
+        boolean removeu = sinistros.removeIf(sinistro -> {
+            Condutor condutor = sinistro.getCondutor();
+            return doc.equals(condutor.getCpf()); 
         });
 
         if(removeu)
             System.out.println("Sinistro removido com sucesso!");
         else
             System.out.println("Erro ao remover Sinistro!");
+    }
+
+    public void excluirFrota(){
+        Scanner scan = new Scanner(System.in);
+
+        Seguradora seguradora = selecionarSeguradora();
+        Cliente cliente = selecionarCliente(seguradora);
+        if(cliente instanceof ClientePF)
+            System.out.println("O cliente deve ser pessoa juridica!");
+        else{
+            System.out.println("Qual o code da frota a ser excluida? ");
+            String code = scan.nextLine();
+            if(((ClientePJ)cliente).atualizarFrota(code, null)){
+                System.out.println("Frota removida com sucesso!");
+            }
+            else{
+                System.out.println("Erro ao remover Frota!");
+            }
+        }
+    }
+
+
+    public void excluirSeguro(){
+        Seguradora seguradora = selecionarSeguradora();
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Digite o id do seguro que deseja excluir: ");
+        int id = scan.nextInt();
+        if( seguradora.cancelarSeguro(id)){
+            System.out.println("Seguro removido com sucesso!");
+        }
+        else{
+            System.out.println("Erro ao remover seguro!");
+        }
     }
 
     /** 
@@ -444,11 +645,27 @@ public class AppMain {
         Cliente cliente = seguradora.buscarCliente(doc);
         System.out.println("Digite a placa do veiculo: ");
         String placa = scan.nextLine();
-        boolean removeu = cliente.getListaVeiculos().removeIf(veiculo -> {return veiculo.getPlaca().equals(placa);});
-        if(removeu)
-            System.out.println("Veiculo removido com sucesso!");
-        else
-            System.out.println("Erro ao excluir veiculo");
+        if(cliente instanceof ClientePJ){
+            System.out.println("Qual o code da frota?");
+            String code = scan.nextLine();
+            List<Frota> frotas = ((ClientePJ)cliente).getListaFrota();
+            for (Frota f : frotas) {
+                if(f.getCode().equals(code)){
+                    boolean removeu = ((ClientePF)cliente).listaVeiculos.removeIf(veiculo -> {return veiculo.getPlaca().equals(placa);});
+                    if(removeu)
+                        System.out.println("Veiculo removido com sucesso!");
+                    else
+                        System.out.println("Erro ao excluir veiculo");
+                }
+            }
+        }
+        else{
+            boolean removeu = ((ClientePF)cliente).listaVeiculos.removeIf(veiculo -> {return veiculo.getPlaca().equals(placa);});
+            if(removeu)
+                System.out.println("Veiculo removido com sucesso!");
+            else
+                System.out.println("Erro ao excluir veiculo");
+        }
     }
 
     /** 
@@ -456,12 +673,9 @@ public class AppMain {
      * @author Maria Eduarda Rocha*/
     public void gerarSinistroDados() {
         Scanner scan = new Scanner(System.in);
-        Seguradora seguradora = selecionarSeguradora();
-        System.out.println("Qual o documento do cliente? ");
+        Seguro seguro = selecionarSeguro();
+        System.out.println("Qual o documento do condutor? ");
         String doc = scan.nextLine();
-        Cliente cliente = seguradora.buscarCliente(doc);
-        System.out.println("Qual a placa do veiculo?");
-        String placa = scan.nextLine();
         String email = "";
         do {
             System.out.print("Qual o email do sinistro? ");
@@ -469,26 +683,102 @@ public class AppMain {
         } while (!Validacao.validaEmail(email));
         System.out.println("Qual o endereco do sinistro? ");
         String endereco = scan.nextLine();
-        for (Veiculo veiculo : cliente.getListaVeiculos()) {
-            if(veiculo.getPlaca().equals(placa)){
-                seguradora.gerarSinistro(veiculo, email, endereco, cliente);
-                return;
-            }
-        }
+        seguro.gerarSinistro(email, endereco, doc);
+        return;
 
     }
 
-    /** 
-     * Método que transfere o seguo de um cliente para outro
-     * @author Maria Eduarda Rocha*/
-    public void transferirSeguro() {
-        Seguradora seguradora = selecionarSeguradora();
+    public void gerarSeguroDados(){
         Scanner scan = new Scanner(System.in);
-        System.out.println("Qual o documento do remetente?");
-        String remetente = scan.nextLine();
-        System.out.println("Qual o documento do destino?");
-        String destino = scan.nextLine();
-        seguradora.transferirSeguro(remetente, destino);
+        Seguradora seguradora = selecionarSeguradora();
+        Cliente cliente = selecionarCliente(seguradora);
+        System.out.println("Pessoa Física ou Juridica? (PF ou PJ)");
+        String tipo = scan.nextLine();
+        if (tipo.toUpperCase().equals("PJ")) {
+            System.out.println("Digite o id do seguro: ");
+            int id = scan.nextInt();
+            String cnpj = "";
+            do {
+                System.out.println("Digite o CNPJ do cliente (XX.XXX.XXX/XXXX-XX): ");
+                cnpj = scan.nextLine();
+            } while (!Validacao.validarCnpj(cnpj));
+
+            LocalDate dataInicio = LocalDate.now();
+            boolean erro = false;
+            do {
+                System.out.print("Digite a data de inicio: ");
+                String dataFundacaoString = scan.nextLine();
+                try {
+                    dataInicio = LocalDate.parse(dataFundacaoString);
+                    erro = false;
+                } catch (Exception e) {
+                    erro = true;
+                    System.out.println("Data digitada eh invalida");
+                }
+            } while (erro);
+
+            LocalDate dataFim = LocalDate.now();
+            erro = false;
+            do {
+                System.out.print("Digite a data de fim: ");
+                String dataFundacaoString = scan.nextLine();
+                try {
+                    dataFim = LocalDate.parse(dataFundacaoString);
+                    erro = false;
+
+                } catch (Exception e) {
+                    erro = true;
+                    System.out.println("Data digitada eh invalida");
+                }
+            } while (erro);
+
+            Frota frota = selecionarFrota((ClientePJ)cliente);
+
+            if (seguradora.gerarSeguro(new SeguroPJ(id, dataInicio, dataFim, seguradora, frota, (ClientePJ)cliente)))
+                System.out.println("Seguro gerado com sucesso!");
+            else
+                System.out.println("Erro ao gerar cliente!");
+        } else {
+            System.out.print("Digite o id do seguro: ");
+            int id = scan.nextInt();
+
+            LocalDate dataInicio = LocalDate.now();
+            boolean erro = false;
+            do {
+                System.out.print("Digite a data de inicio: ");
+                String dataFundacaoString = scan.nextLine();
+                try {
+                    dataInicio = LocalDate.parse(dataFundacaoString);
+                    erro = false;
+
+                } catch (Exception e) {
+                    erro = true;
+                    System.out.println("Data digitada eh invalida");
+                }
+            } while (erro);
+
+            LocalDate dataFim = LocalDate.now();
+            erro = false;
+            do {
+                System.out.print("Digite a data de fim: ");
+                String dataFundacaoString = scan.nextLine();
+                try {
+                    dataFim = LocalDate.parse(dataFundacaoString);
+                    erro = false;
+
+                } catch (Exception e) {
+                    erro = true;
+                    System.out.println("Data digitada eh invalida");
+                }
+            } while (erro);
+
+            Veiculo veiculo = selecionarVeiculo((ClientePF)cliente);
+
+            if (seguradora.gerarSeguro(new SeguroPF(id, dataInicio, dataFim, seguradora, veiculo, (ClientePF)cliente)))
+                System.out.println("Seguro gerado com sucesso!");
+            else
+                System.out.println("Erro ao gerar seguro!");
+        }
     }
 
     /** 
@@ -509,7 +799,7 @@ public class AppMain {
         Scanner scan = new Scanner(System.in);
         System.out.println("Pessoa Física ou Juridica? (PF ou PJ)");
         String tipo = scan.nextLine();
-        if (tipo.equals("PJ")) {
+        if (tipo.toUpperCase().equals("PJ")) {
             String nome = "";
             do {
                 System.out.print("Digite o nome do cliente: ");
@@ -532,6 +822,7 @@ public class AppMain {
                 String dataFundacaoString = scan.nextLine();
                 try {
                     dataFundacao = LocalDate.parse(dataFundacaoString);
+                    erro = false;
                 } catch (Exception e) {
                     erro = true;
                     System.out.println("Data digitada eh invalida");
@@ -540,8 +831,14 @@ public class AppMain {
 
             System.out.print("Digite a quantidade de funcionários do cliente: ");
             int qtdFuncionarios = scan.nextInt();
-
-            if (seguradora.cadastrarCliente(new ClientePJ(cnpj, dataFundacao, nome, endereco, qtdFuncionarios)))
+            System.out.print("Digite o telefone do cliente: ");
+            String telefone = scan.nextLine();
+            String email = "";
+            do {
+                System.out.print("Digite o email do cliente: ");
+                email = scan.nextLine();
+            } while (!Validacao.validaEmail(email));
+            if (seguradora.cadastrarCliente(new ClientePJ(cnpj, dataFundacao, nome, endereco, telefone, email, qtdFuncionarios)))
                 System.out.println("Cliente adicionado com sucesso!");
             else
                 System.out.println("Erro ao cadastrar cliente!");
@@ -574,11 +871,17 @@ public class AppMain {
             System.out.print("Digite o gênero do cliente: ");
             String genero = scan.nextLine();
 
-            System.out.print("Digite a classe econômica do cliente: ");
-            String classeEconomica = scan.nextLine();
+            System.out.print("Digite o telefone do cliente: ");
+            String telefone = scan.nextLine();
 
-            if (seguradora.cadastrarCliente(new ClientePF(cpf, dataNascimento, nome, endereco, educacao, dataLicenca, genero,
-                    classeEconomica)))
+            String email = "";
+            do {
+                System.out.print("Digite o email do cliente: ");
+                email = scan.nextLine();
+            } while (!Validacao.validaEmail(email));
+
+            if (seguradora.cadastrarCliente(new ClientePF(cpf, dataNascimento, nome, endereco, educacao, email, genero,
+                    telefone)))
                 System.out.println("Cliente adicionado com sucesso!");
             else
                 System.out.println("Erro ao adicionar cliente!");

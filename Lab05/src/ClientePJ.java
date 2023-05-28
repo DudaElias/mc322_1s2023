@@ -49,6 +49,10 @@ public class ClientePJ extends Cliente {
         this.qtdFuncionarios = qtdFuncionarios;
     }
 
+    public List<Frota> getListaFrota() {
+        return listaFrota;
+    }
+
     /** 
      * Método toString para formatar os atributos da classe em formato de texto
      * @author Maria Eduarda Rocha

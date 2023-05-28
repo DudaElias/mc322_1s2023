@@ -76,6 +76,10 @@ public class Seguradora {
         this.listaSeguros = listaSeguros;
     }
 
+    public String getCnpj() {
+        return cnpj;
+    }
+
     /** 
      * Método que adiciona um novo cliente a lista de clientes da seguradora
      * @author Maria Eduarda Rocha

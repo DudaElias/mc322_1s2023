@@ -11,9 +11,13 @@ public class Sinistro {
      * Construtor da classe que setta as propriedades do objeto através de setters
      * @author Maria Eduarda Rocha*/    
     public Sinistro(String data, 
-    String endereco){
+    String endereco,
+    Condutor condutor,
+    Seguro seguro){
         setData(data);
         setEndereco(endereco);
+        setCondutor(condutor);
+        setSeguro(seguro);
         this.id = gerarId();
     }
 
