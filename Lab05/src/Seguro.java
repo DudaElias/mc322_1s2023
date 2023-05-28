@@ -85,7 +85,10 @@ public abstract class Seguro {
      * @param email String - email do sinistro a ser gerado
      * @param endereco String - endereco do sinistro a ser gerado
      * @return boolean - se a adição deu certo ou não*/
-    public boolean gerarSinistro(String email, String endereco) {
+    public boolean gerarSinistro(String email, String endereco, String cpf) {
+        Condutor condutor = listaCondutores.stream().filter(c -> c.getCpf().equals(cpf)).findFirst().orElse(null);
+        if(condutor != null)
+            condutor.listaSinistros.add(new Sinistro(email, endereco));
         return listaSinistros.add(new Sinistro(email, endereco));
     }
 

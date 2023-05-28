@@ -45,13 +45,13 @@ public class SeguroPJ extends Seguro{
 
             int qtdSinistrosCondutor = 0;
             for (Condutor condutor : listaCondutores) {
-                qtdSinistrosCondutor += this.seguradora.getSinistrosPorCliente(condutor.getCpf()).size();
+                qtdSinistrosCondutor += this.seguradora.getSinistrosPorCliente(condutor.getCpf(), "pf").size();
             }
 
             return (CalcSeguro.VALOR_BASE.getValor() * (10 + this.cliente.getQtdFuncionarios()/10)*
             (1 + 1/( frota.listaVeiculos.size() + 2) ) *
             (1 + 1/( periodo.getYears() +2) ) *
-            (2 + this.seguradora.getSinistrosPorCliente(this.cliente.getCnpj()).size() /10) *
+            (2 + this.seguradora.getSinistrosPorCliente(this.cliente.getCnpj(), "pj").size() /10) *
             (5 + qtdSinistrosCondutor /10));
     }
 

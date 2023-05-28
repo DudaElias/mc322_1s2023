@@ -193,13 +193,18 @@ public class Seguradora {
         return listaRetorno;
     }
 
-    //GET SINISTROS POR CLIENTE
-
-    public List<Sinistro> getSinistrosPorCliente(String idCliente){
+    /** 
+     * Método que retorna uma lista de sinistros baseado no cliente passado como parametro
+     * @author Maria Eduarda Rocha
+     * @param idCliente String - pode ser um CPF ou um CNPJ
+     * @param tipo String - "PF" ou "PJ"
+     * @return List<Sinistro> - lista de sinistros do cliente*/
+    public List<Sinistro> getSinistrosPorCliente(String idCliente, String tipo){
         List<Sinistro> sinistros = new ArrayList<Sinistro>();
-        for(Seguro seguro : listaSeguros){
-            seguro.listaSinistros.get(0).
+        for(Seguro seguro : this.getSegurosPorCliente(idCliente, tipo)){
+            sinistros.addAll(seguro.listaSinistros);
         }
+        return sinistros;
     }
 
     /** 

@@ -43,7 +43,7 @@ public class SeguroPF extends Seguro{
     public double calcularValor() {
         int qtdSinistrosPorCondutor = 0;
         for (Condutor condutor : listaCondutores) {
-            qtdSinistrosPorCondutor += super.seguradora.getSinistrosPorCliente(condutor.getCpf()).size();
+            qtdSinistrosPorCondutor += super.seguradora.getSinistrosPorCliente(condutor.getCpf(), "pf").size();
         }
 
         final Period periodo = Period.between(this.cliente.getDataNascimento(), LocalDate.now());
@@ -57,7 +57,7 @@ public class SeguroPF extends Seguro{
         else{
             FATOR_IDADE = CalcSeguro.FATOR_60_90.getValor();
         }
-        return CalcSeguro.VALOR_BASE.getValor() * FATOR_IDADE * (1 + 1/(this.cliente.listaVeiculos.size()+2)) * (2 + super.seguradora.getSinistrosPorCliente(this.cliente.getCpf()).size()/10)
+        return CalcSeguro.VALOR_BASE.getValor() * FATOR_IDADE * (1 + 1/(this.cliente.listaVeiculos.size()+2)) * (2 + super.seguradora.getSinistrosPorCliente(this.cliente.getCpf(), "pf").size()/10)
         * (5 + qtdSinistrosPorCondutor/10);
     }
 

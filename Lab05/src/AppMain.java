@@ -14,7 +14,7 @@ public class AppMain {
         try {
 
             // Criação dos objetos usados para as operações
-            Seguradora seguradora = new Seguradora("Teste", "2356-8974", "teste@gmail.com", "Rua de Teste");
+            Seguradora seguradora = new Seguradora("Teste", "2356-8974", "teste@gmail.com", "Rua de Teste", "87.039.558/0001-69");
 
             seguradoras.add(seguradora);
 
@@ -22,29 +22,35 @@ public class AppMain {
             Veiculo veiculo2 = new Veiculo("def1234", "Honda", "CITY", 2010);
 
             ClientePF pf = new ClientePF("465.744.250-34", LocalDate.of(2003, 8, 29), "Teste", "Rua de Teste",
-                    "Teste Educacao", LocalDate.of(2013, 07, 20), "Teste Genero", "Teste Classe");
-            ClientePJ pj = new ClientePJ("83.160.132/0001-08", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", 100);
+                    "Teste Educacao", "teste@gmail.com", "Teste genero", "Teste Classe");
+            ClientePJ pj = new ClientePJ("83.160.132/0001-08", LocalDate.of(2013, 07, 20), "Teste", "Rua de Teste", "123456", "teste@gmail.com", 100);
+
+            Condutor condutor = new Condutor("368.355.130-55", "Jose", "123456", "Rua de Teste", "teste@gmail.com", LocalDate.of(1975, 07, 20));
+            
+            Frota frota = new Frota("123");
+            frota.addVeiculo(veiculo2);
 
             //Cadastrar veiculos nos clientes
-            pf.getListaVeiculos().add(veiculo);
-            pj.getListaVeiculos().add(veiculo2);
-
-            Sinistro sinistro = new Sinistro("14-03-2023", "Rua de Teste", seguradora, pj, veiculo);
+            pf.listaVeiculos.add(veiculo);
 
             // Cadastrar clientes na seguradora
             seguradora.cadastrarCliente(pf);
             seguradora.cadastrarCliente(pj);
 
+            // Gera um seguro dentro da seguradora
+            seguradora.gerarSeguro(new SeguroPF(0, LocalDate.of(2013, 07, 20), LocalDate.of(2020, 07, 20), seguradora, veiculo, pf));
+            seguradora.gerarSeguro(new SeguroPJ(1, LocalDate.of(2013, 07, 20), LocalDate.of(2023, 07, 20), seguradora, frota, pj));
+
+
             // Gera um sinistro dentro da seguradora
-            seguradora.gerarSinistro(veiculo, "teste@gmail.com", "Rua de Teste", pf);
-            seguradora.gerarSinistro(veiculo2, "teste2@gmail.com", "Rua de Teste 2", pj);
+            seguradora.getListaSeguros().get(0).gerarSinistro("teste@gmail.com", "Rua de Teste", "368.355.130-55");
 
             // Lista clientes do tipo PJ
             List<Cliente> clientes = seguradora.listarClientes("pj");
             System.out.println("Clientes da Seguradora: \n" + clientes.toString() + "\n");
 
-            // Lista todos os sinistros cadastrados na seguradora
-            List<Sinistro> sinistros = seguradora.listarSinistros();
+            // Lista todos os sinistros cadastrados num determinado cliente
+            List<Sinistro> sinistros = seguradora.getSinistrosPorCliente("");
             System.out.println("Sinistros da Seguradora: \n" + sinistros.toString() + "\n");
 
             // Mostra o sinistro de determinado cliente dentro da seguradora
@@ -54,18 +60,15 @@ public class AppMain {
             // CALCULAR RECEITA
             System.out.printf("Receita da seguradora: %f\n", seguradora.calcularReceita());
 
-            // CALCULAR PRECO SEGURO CLIENTE
-
-            pf.setValorSeguro(seguradora.calcularPrecoSeguroCliente(pf));
-            pj.setValorSeguro(seguradora.calcularPrecoSeguroCliente(pj));
-            System.out.printf("Preço seguro cliente PF: %f\n", pf.getValorSeguro());
-            System.out.printf("Preço seguro cliente PF: %f\n", pj.getValorSeguro());
-
             // Teste de toString das classes
             System.out.println("Veiculo:\n" + veiculo.toString() + "\n");
             System.out.println("Pessoa Fisica:\n" + pf.toString() + "\n");
             System.out.println("Pessoa Juridica:\n" + pj.toString() + "\n");
-            System.out.println("Sinistro:\n" + sinistro.toString() + "\n");
+            System.out.println("Condutor:\n" + condutor.toString() + "\n");
+            System.out.println("Frota:\n" + frota.toString() + "\n");
+            System.out.println("Seguro PF:\n" + seguradora.getListaSeguros().get(0).toString() + "\n");
+            System.out.println("Seguro PJ:\n" + seguradora.getListaSeguros().get(1).toString() + "\n");
+            System.out.println("Sinistro:\n" + seguradora.getListaSeguros().get(0).listaSinistros.get(0).toString() + "\n");
             System.out.println("Seguradora:\n" + seguradora.toString());
 
             AppMain menus = new AppMain();
