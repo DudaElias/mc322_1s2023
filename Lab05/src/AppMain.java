@@ -31,7 +31,7 @@ public class AppMain {
             Frota frota = new Frota("123");
             
             frota.addVeiculo(veiculo2);
-            
+            pj.cadastrarFrota(frota);
             
             //Cadastrar veiculos nos clientes
             pf.listaVeiculos.add(veiculo);
@@ -309,9 +309,9 @@ public class AppMain {
     }
 
     /** 
-     * Método que pede e retorna a seguradora que o user escolheu
+     * Método que pede e retorna o seguro que o user escolheu
      * @author Maria Eduarda Rocha
-     * @return Seguradora - seguradora escolhida pelo user*/
+     * @return Seguro - seguro escolhido pelo user*/
     public Seguro selecionarSeguro() {
         Seguradora seguradora = selecionarSeguradora();
         Scanner scan = new Scanner(System.in);
@@ -336,7 +336,11 @@ public class AppMain {
         String doc = scan.nextLine();
         return seguradora.buscarCliente(doc);
     }
-
+    /** 
+     * Método que pede e retorna a frota que o user escolheu
+     * @author Maria Eduarda Rocha
+     * @param c ClientePJ - cliente que tem a frota
+     * @return Frota - frota escolhida pelo user*/
     public Frota selecionarFrota(ClientePJ c){
         Scanner scan = new Scanner(System.in);
         System.out.println("Qual o code da frota?");
@@ -348,6 +352,11 @@ public class AppMain {
         return null;
     }
 
+    /** 
+     * Método que pede e retorna o veiculo que o user escolheu
+     * @author Maria Eduarda Rocha
+     * @param c ClientePF - cliente que tem o veiculo
+     * @return Veiculo - veiculo escolhido pelo user*/
     public Veiculo selecionarVeiculo(ClientePF c){
         Scanner scan = new Scanner(System.in);
         System.out.println("Qual a placa do veiculo?");
@@ -406,7 +415,7 @@ public class AppMain {
         int ano = scan.nextInt();
         if(cliente instanceof ClientePJ){
             System.out.println("Qual o code da frota?");
-            String code = scan.nextLine();
+            String code = scan.next();
             List<Frota> frotas = ((ClientePJ)cliente).getListaFrota();
             for (Frota f : frotas) {
                 if(f.getCode().equals(code)){
@@ -426,7 +435,9 @@ public class AppMain {
         }
     }
 
-
+    /** 
+     * Método que adiciona uma nova frota dentro de um cliente pessoa juridica
+     * @author Maria Eduarda Rocha*/
     public void cadastrarFrota() {
         Scanner scan = new Scanner(System.in);
         Seguradora seguradora = selecionarSeguradora();
@@ -501,7 +512,10 @@ public class AppMain {
         Cliente cliente = seguradora.buscarCliente(doc);
         listarVeiculos(cliente);
     }
-
+    /** 
+     * Método que lista todos os veiculos de um cliente passado como parametro
+     * @param cliente Cliente - cliente que quer mostrar os veiculos
+     * @author Maria Eduarda Rocha*/
     public void listarVeiculos(Cliente cliente){
         if(cliente instanceof ClientePF){
             for(Veiculo veiculo: ((ClientePF)cliente).listaVeiculos){
@@ -530,7 +544,9 @@ public class AppMain {
         }
     }
 
-
+    /** 
+     * Método que lista todos os seguros de um cliente especifico
+     * @author Maria Eduarda Rocha*/
     public void listarSeguroCliente(){
         Scanner scan = new Scanner(System.in);
         Seguradora seguradora = selecionarSeguradora();
@@ -545,6 +561,9 @@ public class AppMain {
         }
     }
 
+    /** 
+     * Método que lista todos os veiculos de uma frota especifica
+     * @author Maria Eduarda Rocha*/
     public void listarVeiculoFrota(){
         Scanner scan = new Scanner(System.in);
         Seguradora seguradora = selecionarSeguradora();
@@ -578,7 +597,7 @@ public class AppMain {
     }
 
     /** 
-     * Método que exclui um sinistro da seguradora
+     * Método que exclui um sinistro de um seguro
      * @author Maria Eduarda Rocha*/
     public void excluirSinistro(){
         Seguradora seguradora = selecionarSeguradora();
@@ -601,6 +620,9 @@ public class AppMain {
             System.out.println("Erro ao remover Sinistro!");
     }
 
+    /** 
+     * Método que exclui uma frota de um cliente pessoa juridica
+     * @author Maria Eduarda Rocha*/
     public void excluirFrota(){
         Scanner scan = new Scanner(System.in);
 
@@ -620,7 +642,9 @@ public class AppMain {
         }
     }
 
-
+    /** 
+     * Método que exclui um seguro da seguradora
+     * @author Maria Eduarda Rocha*/
     public void excluirSeguro(){
         Seguradora seguradora = selecionarSeguradora();
         Scanner scan = new Scanner(System.in);
@@ -651,7 +675,7 @@ public class AppMain {
             List<Frota> frotas = ((ClientePJ)cliente).getListaFrota();
             for (Frota f : frotas) {
                 if(f.getCode().equals(code)){
-                    boolean removeu = ((ClientePF)cliente).listaVeiculos.removeIf(veiculo -> {return veiculo.getPlaca().equals(placa);});
+                    boolean removeu = f.listaVeiculos.removeIf(veiculo -> {return veiculo.getPlaca().equals(placa);});
                     if(removeu)
                         System.out.println("Veiculo removido com sucesso!");
                     else
@@ -669,7 +693,7 @@ public class AppMain {
     }
 
     /** 
-     * Método que pede as informações do sinistro a ser gerado e o gera
+     * Método que pede as informações do sinistro a ser gerado e o gera dentro do seguro
      * @author Maria Eduarda Rocha*/
     public void gerarSinistroDados() {
         Scanner scan = new Scanner(System.in);
@@ -688,6 +712,9 @@ public class AppMain {
 
     }
 
+    /** 
+     * Método que pede as informações do seguro a ser gerado e o gera dentro da seguradora
+     * @author Maria Eduarda Rocha*/
     public void gerarSeguroDados(){
         Scanner scan = new Scanner(System.in);
         Seguradora seguradora = selecionarSeguradora();
@@ -700,14 +727,14 @@ public class AppMain {
             String cnpj = "";
             do {
                 System.out.println("Digite o CNPJ do cliente (XX.XXX.XXX/XXXX-XX): ");
-                cnpj = scan.nextLine();
+                cnpj = scan.next();
             } while (!Validacao.validarCnpj(cnpj));
 
             LocalDate dataInicio = LocalDate.now();
             boolean erro = false;
             do {
                 System.out.print("Digite a data de inicio: ");
-                String dataFundacaoString = scan.nextLine();
+                String dataFundacaoString = scan.next();
                 try {
                     dataInicio = LocalDate.parse(dataFundacaoString);
                     erro = false;
@@ -721,7 +748,7 @@ public class AppMain {
             erro = false;
             do {
                 System.out.print("Digite a data de fim: ");
-                String dataFundacaoString = scan.nextLine();
+                String dataFundacaoString = scan.next();
                 try {
                     dataFim = LocalDate.parse(dataFundacaoString);
                     erro = false;
@@ -746,7 +773,7 @@ public class AppMain {
             boolean erro = false;
             do {
                 System.out.print("Digite a data de inicio: ");
-                String dataFundacaoString = scan.nextLine();
+                String dataFundacaoString = scan.next();
                 try {
                     dataInicio = LocalDate.parse(dataFundacaoString);
                     erro = false;
@@ -761,7 +788,7 @@ public class AppMain {
             erro = false;
             do {
                 System.out.print("Digite a data de fim: ");
-                String dataFundacaoString = scan.nextLine();
+                String dataFundacaoString = scan.next();
                 try {
                     dataFim = LocalDate.parse(dataFundacaoString);
                     erro = false;
@@ -832,11 +859,11 @@ public class AppMain {
             System.out.print("Digite a quantidade de funcionários do cliente: ");
             int qtdFuncionarios = scan.nextInt();
             System.out.print("Digite o telefone do cliente: ");
-            String telefone = scan.nextLine();
+            String telefone = scan.next();
             String email = "";
             do {
                 System.out.print("Digite o email do cliente: ");
-                email = scan.nextLine();
+                email = scan.next();
             } while (!Validacao.validaEmail(email));
             if (seguradora.cadastrarCliente(new ClientePJ(cnpj, dataFundacao, nome, endereco, telefone, email, qtdFuncionarios)))
                 System.out.println("Cliente adicionado com sucesso!");
@@ -852,9 +879,6 @@ public class AppMain {
             System.out.print("Digite o endereço do cliente: ");
             String endereco = scan.nextLine();
 
-            System.out.print("Digite a data de licença: ");
-            String dataLicencaString = scan.nextLine();
-            LocalDate dataLicenca = LocalDate.parse(dataLicencaString);
             String cpf = "";
             do {
                 System.out.print("Digite o CPF (XXX.XXX.XXX-XX): ");
